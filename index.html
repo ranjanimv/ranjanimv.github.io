@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kanasu — Art &amp; Progress</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --dark-green: #141e14;
+  --mid-green:  #2d372d;
+  --soft-green: #475147;
+  --olive:      #644614;
+  --gold:       #997947;
+  --orange:     #fa7846;
+  --orange-mid: #ff9e6c;
+  --orange-light:#ffab79;
+  --cream:      #fdf5ee;
+  --white:      #fffcf9;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--white);
+  color: var(--dark-green);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.2rem 4rem;
+  transition: background 0.4s, box-shadow 0.4s;
+}
+nav.scrolled {
+  background: rgba(255,252,249,0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1px 0 rgba(20,30,20,0.08);
+}
+.nav-logo {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.6rem; font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--gold); text-decoration: none;
+}
+.nav-links { display: flex; gap: 0; list-style: none; }
+.nav-links a {
+  text-decoration: none; color: var(--dark-green);
+  font-size: 0.75rem; letter-spacing: 0.14em;
+  text-transform: uppercase; font-weight: 400;
+  opacity: 0.55; padding: 0.4rem 1.2rem;
+  border-bottom: 2px solid transparent;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+.nav-links a:hover { opacity: 1; border-color: var(--orange); }
+.hero {
+  min-height: 100vh; background: var(--dark-green);
+  display: grid; grid-template-columns: 1.1fr 0.9fr;
+  position: relative; overflow: hidden;
+}
+.hero-left {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 10rem 5rem 6rem; position: relative; z-index: 1;
+}
+.hero-eyebrow {
+  font-size: 0.68rem; letter-spacing: 0.26em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 2rem;
+  opacity: 0; animation: fadeUp 0.9s 0.2s forwards;
+}
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.5rem, 5.5vw, 6rem);
+  font-weight: 300; line-height: 1.02; color: var(--cream);
+  margin-bottom: 2.5rem;
+  opacity: 0; animation: fadeUp 0.9s 0.4s forwards;
+}
+.hero-title em { font-style: italic; color: var(--orange-mid); }
+.hero-subtitle {
+  font-size: 0.9rem; line-height: 1.85;
+  color: rgba(253,245,238,0.5); max-width: 400px; margin-bottom: 3.5rem;
+  opacity: 0; animation: fadeUp 0.9s 0.6s forwards;
+}
+.hero-tags {
+  display: flex; gap: 0.8rem; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+}
+.hero-tag {
+  font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold); border: 1px solid rgba(153,121,71,0.35);
+  padding: 0.4rem 1rem;
+}
+.hero-right {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; justify-content: center;
+  padding: 6rem 4rem 6rem 2rem;
+}
+.hero-frames { position: relative; width: 100%; max-width: 340px; }
+.hero-frame {
+  width: 100%; padding-bottom: 120%; position: relative;
+  border: 1px solid rgba(153,121,71,0.25);
+}
+.hero-frame-back {
+  position: absolute; width: 88%; padding-bottom: 105%;
+  top: -2rem; right: -2rem;
+  border: 1px solid rgba(250,120,70,0.12);
+  background: rgba(45,55,45,0.35);
+}
+.hero-frame-inner {
+  position: absolute; inset: 0; background: var(--mid-green);
+  overflow: hidden;
+}
+.hero-frame-inner img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.about {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6rem; padding: 8rem 6rem;
+  background: var(--cream);
+}
+.about-label {
+  font-size: 0.68rem; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 1.5rem;
+}
+.about-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+  font-weight: 300; line-height: 1.15;
+  color: var(--dark-green); margin-bottom: 2.5rem;
+}
+.about-body {
+  font-size: 0.92rem; line-height: 1.9;
+  color: var(--soft-green); margin-bottom: 1.5rem;
+}
+.about-quote {
+  border-left: 2px solid var(--orange);
+  padding-left: 1.5rem; margin-top: 2.5rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem; font-style: italic;
+  color: var(--olive); line-height: 1.7;
+}
+.about-right {
+  display: flex; flex-direction: column; justify-content: center; gap: 1.5rem;
+}
+.about-stat {
+  padding: 2rem; border: 1px solid rgba(100,70,20,0.15);
+  background: var(--white);
+}
+.about-stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem; font-weight: 300;
+  color: var(--orange); line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.about-stat-label {
+  font-size: 0.75rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--soft-green);
+}
+.gallery-section { padding: 6rem 6rem 4rem; }
+.gallery-section:nth-child(even) { background: var(--cream); }
+.section-header { margin-bottom: 3.5rem; }
+.section-medium {
+  font-size: 0.68rem; letter-spacing: 0.26em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 0.8rem;
+}
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 3vw, 3rem);
+  font-weight: 300; color: var(--dark-green);
+  margin-bottom: 0.5rem;
+}
+.section-subtitle {
+  font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gold); opacity: 0.7;
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+.piece-card {
+  background: var(--white);
+  border: 1px solid rgba(100,70,20,0.1);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.piece-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(20,30,20,0.1);
+}
+.piece-img {
+  width: 100%; aspect-ratio: 4/3; overflow: hidden;
+  background: var(--mid-green);
+}
+.piece-img img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.5s;
+}
+.piece-card:hover .piece-img img { transform: scale(1.04); }
+.piece-info { padding: 1.2rem 1.4rem 1.5rem; }
+.piece-date {
+  font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 0.4rem;
+}
+.piece-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem; font-weight: 400;
+  color: var(--dark-green); margin-bottom: 0.5rem;
+}
+.piece-notes {
+  font-size: 0.82rem; line-height: 1.65;
+  color: var(--soft-green);
+}
+footer {
+  background: var(--dark-green); color: var(--cream);
+  padding: 4rem 6rem; text-align: center;
+}
+.footer-logo {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.8rem; font-weight: 600;
+  color: var(--gold); margin-bottom: 1rem;
+}
+.footer-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem; font-style: italic;
+  color: rgba(253,245,238,0.5);
+  max-width: 500px; margin: 0 auto 2rem; line-height: 1.8;
+}
+.footer-copy {
+  font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(153,121,71,0.5);
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.7s, transform 0.7s;
+}
+.reveal.visible { opacity: 1; transform: none; }
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .about { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 2rem; }
+  .gallery-section { padding: 4rem 2rem; }
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a class="nav-logo" href="#">Kanasu</a>
+  <ul class="nav-links">
+    <li><a href="#paintings">Paintings</a></li>
+    <li><a href="#polymerclay">Polymer Clay</a></li>
+    <li><a href="#ceramics">Ceramics</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">A living record of creative growth — Nashville, TN</p>
+    <h1 class="hero-title">Art has<br><em>saved me</em><br>more than once.</h1>
+    <p class="hero-subtitle">A record of creative growth across painting, polymer clay, and ceramics — and a mission to make art accessible to those who need it most.</p>
+    <div class="hero-tags">
+      <span class="hero-tag">Paintings</span>
+      <span class="hero-tag">Polymer Clay</span>
+      <span class="hero-tag">Ceramics</span>
+      <span class="hero-tag">Nashville</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-frames">
+      <div class="hero-frame-back"></div>
+      <div class="hero-frame">
+        <div class="hero-frame-inner">
+          <img src="Potteryfruitbowl.PNG" alt="Fruit Bowl">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="about-left">
+    <p class="about-label">The story behind Kanasu</p>
+    <h2 class="about-title">Engineer.<br>Artist. Healer.</h2>
+    <p class="about-body">I was born in India and came to art in my early twenties as a way to process and accept what life had handed me. Art gave me a language for what I couldn't otherwise express, and it changed everything.</p>
+    <p class="about-body">I began with acrylic painting and pouring, then fell into polymer clay jewelry. I established Kanasu with a clear purpose: to create beautiful things and donate proceeds to local women's shelters, because I believe deeply in the power of support, and in reaching women who still need it. Kanasu was selected to showcase at art fairs across San Diego before a growing family brought that chapter to a pause.</p>
+    <p class="about-body">Postpartum, ceramics found me. What began as a few hours of quiet studio time became a lifeline back to myself. If I could draw one throughline through my life, it would be art. It has met me at every difficult crossing and carried me forward.</p>
+    <blockquote class="about-quote">"Art shouldn't have a high barrier to entry — it is too powerful, too therapeutic, too human for that. My goal is to give back some of the peace I have found."</blockquote>
+  </div>
+  <div class="about-right">
+    <div class="about-stat">
+      <div class="about-stat-num">3</div>
+      <div class="about-stat-label">Art forms explored</div>
+    </div>
+    <div class="about-stat">
+      <div class="about-stat-num">6 lbs</div>
+      <div class="about-stat-label">Largest weight thrown on the wheel</div>
+    </div>
+    <div class="about-stat">
+      <div class="about-stat-num">&#8734;</div>
+      <div class="about-stat-label">Pieces yet to make</div>
+    </div>
+  </div>
+</section>
+
+<div style="padding: 5rem 6rem 1rem; background: var(--white);">
+  <p style="font-size:0.68rem;letter-spacing:0.26em;text-transform:uppercase;color:var(--orange);margin-bottom:0.8rem;">Gallery</p>
+  <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4vw,4rem);font-weight:300;color:var(--dark-green);">A record of growth</h2>
+</div>
+
+<section class="gallery-section" id="paintings">
+  <div class="section-header reveal">
+    <p class="section-medium">Medium — Acrylic</p>
+    <h2 class="section-title">Paintings</h2>
+    <p class="section-subtitle">Where it all began</p>
+  </div>
+  <div class="gallery-grid">
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="acrylicpainting1.jpeg" alt="Fire and Ice with Mandala"></div>
+      <div class="piece-info">
+        <p class="piece-date">2022</p>
+        <h3 class="piece-title">Fire and Ice with Mandala</h3>
+        <p class="piece-notes">Acrylic fire and ice with mandala in gel medium with epoxy sealant.</p>
+      </div>
+    </div>
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="acrylicpainting2.jpg" alt="Fire and Ice"></div>
+      <div class="piece-info">
+        <p class="piece-date">2022</p>
+        <h3 class="piece-title">Fire and Ice</h3>
+        <p class="piece-notes">Acrylic painting.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="gallery-section" id="polymerclay">
+  <div class="section-header reveal">
+    <p class="section-medium">Medium — Polymer Clay</p>
+    <h2 class="section-title">Jewelry</h2>
+    <p class="section-subtitle">The Kanasu Collection</p>
+  </div>
+  <div class="gallery-grid">
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="polymerclay1.JPG" alt="Floral Sculpting"></div>
+      <div class="piece-info">
+        <p class="piece-date">2024</p>
+        <h3 class="piece-title">Floral Sculpting</h3>
+        <p class="piece-notes">Floral sculpting in polymer clay.</p>
+      </div>
+    </div>
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="PolymerClay (1).JPG" alt="Bookmarks with Hand-Sculpted Flowers"></div>
+      <div class="piece-info">
+        <p class="piece-date">2024</p>
+        <h3 class="piece-title">Bookmarks</h3>
+        <p class="piece-notes">Bookmarks with hand-sculpted flowers.</p>
+      </div>
+    </div>
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="PolymerClay (2).JPG" alt="Dancer"></div>
+      <div class="piece-info">
+        <p class="piece-date">2023</p>
+        <h3 class="piece-title">Dancer</h3>
+        <p class="piece-notes">Depiction of earth with translucent clay and alcohol inks.</p>
+      </div>
+    </div>
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="PolymerClay (3).JPG" alt="Earth Series"></div>
+      <div class="piece-info">
+        <p class="piece-date">2023</p>
+        <h3 class="piece-title">Earth Series</h3>
+        <p class="piece-notes">Depiction of earth with translucent clay and alcohol inks.</p>
+      </div>
+    </div>
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="PolymerClay (4).JPG" alt="Bridal Line I"></div>
+      <div class="piece-info">
+        <p class="piece-date">2024</p>
+        <h3 class="piece-title">Bridal Line I</h3>
+        <p class="piece-notes">A bridal line of jewelry.</p>
+      </div>
+    </div>
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="PolymerClay (5).JPG" alt="Bridal Line II"></div>
+      <div class="piece-info">
+        <p class="piece-date">2024</p>
+        <h3 class="piece-title">Bridal Line II</h3>
+        <p class="piece-notes">A bridal line of jewelry.</p>
+      </div>
+    </div>
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="PolymerClay (6).JPG" alt="Bridal Line III"></div>
+      <div class="piece-info">
+        <p class="piece-date">2024</p>
+        <h3 class="piece-title">Bridal Line III</h3>
+        <p class="piece-notes">A bridal line of jewelry.</p>
+      </div>
+    </div>
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="PolymerClay (7).JPG" alt="Colour-Shifting Watercolour"></div>
+      <div class="piece-info">
+        <p class="piece-date">2023</p>
+        <h3 class="piece-title">Colour-Shifting Watercolour</h3>
+        <p class="piece-notes">Colour-shifting watercolour on polymer clay.</p>
+      </div>
+    </div>
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="PolymerClay (8).JPG" alt="Ballerina Earrings"></div>
+      <div class="piece-info">
+        <p class="piece-date">2023</p>
+        <h3 class="piece-title">Ballerina Earrings</h3>
+        <p class="piece-notes">Trying florals with fondant shapers — ballerina earrings.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="gallery-section" id="ceramics">
+  <div class="section-header reveal">
+    <p class="section-medium">Medium — Stoneware &amp; Earthenware</p>
+    <h2 class="section-title">Ceramics</h2>
+    <p class="section-subtitle">Finding my way back</p>
+  </div>
+  <div class="gallery-grid">
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="Potteryfruitbowl.PNG" alt="Fruit Bowl"></div>
+      <div class="piece-info">
+        <p class="piece-date">August 2025</p>
+        <h3 class="piece-title">Fruit Bowl</h3>
+        <p class="piece-notes">Largest weight thrown on the wheel at 6 lbs.</p>
+      </div>
+    </div>
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="PotteryMugs.JPG" alt="Mugs — Handles and Bodies"></div>
+      <div class="piece-info">
+        <p class="piece-date">2025</p>
+        <h3 class="piece-title">Mugs — Handles &amp; Bodies</h3>
+        <p class="piece-notes">Trying different handles and bodies.</p>
+      </div>
+    </div>
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="PotteryMugsLarge.JPG" alt="Tall Mugs"></div>
+      <div class="piece-info">
+        <p class="piece-date">2025</p>
+        <h3 class="piece-title">Tall Mugs</h3>
+        <p class="piece-notes">First attempts at throwing tall mugs, bubble bugs, and underglazing.</p>
+      </div>
+    </div>
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="PotteryVase.JPG" alt="Carved Vase"></div>
+      <div class="piece-info">
+        <p class="piece-date">2025</p>
+        <h3 class="piece-title">Carved Vase</h3>
+        <p class="piece-notes">First attempt at carving.</p>
+      </div>
+    </div>
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="PotteryWallplanters.PNG" alt="Wall Planters"></div>
+      <div class="piece-info">
+        <p class="piece-date">2025</p>
+        <h3 class="piece-title">Wall Planters</h3>
+        <p class="piece-notes">First attempt at creating a wall planter.</p>
+      </div>
+    </div>
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="PotteryMugs1.JPG" alt="Mugs — Clay Techniques"></div>
+      <div class="piece-info">
+        <p class="piece-date">2026</p>
+        <h3 class="piece-title">Mugs — Clay Techniques</h3>
+        <p class="piece-notes">Trying different clay techniques, underglazes, and stencils for glazing.</p>
+      </div>
+    </div>
+
+    <div class="piece-card reveal">
+      <div class="piece-img"><img src="Potterybudvase.JPG" alt="Bud Vase"></div>
+      <div class="piece-info">
+        <p class="piece-date">2026</p>
+        <h3 class="piece-title">Bud Vase</h3>
+        <p class="piece-notes">Improved carving technique.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Kanasu</div>
+  <p class="footer-quote">"Art has saved me at multiple points in my life.<br>I want to pass that peace forward."</p>
+  <p class="footer-copy">&copy; 2026 Kanasu</p>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

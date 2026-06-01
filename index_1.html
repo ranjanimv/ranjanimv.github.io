@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kanasu — Art & Progress</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --dark-green:   #141e14;
+      --mid-green:    #2d372d;
+      --soft-green:   #475147;
+      --olive:        #644614;
+      --gold:         #997947;
+      --orange:       #fa7846;
+      --orange-mid:   #ff9e6c;
+      --orange-light: #ffab79;
+      --cream:        #fdf5ee;
+      --white:        #fffcf9;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--white);
+      color: var(--dark-green);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 4rem;
+      transition: background 0.4s, box-shadow 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(255,252,249,0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 1px 0 rgba(20,30,20,0.08);
+    }
+    .nav-logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.6rem; font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--gold); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 0; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--dark-green);
+      font-size: 0.75rem; letter-spacing: 0.14em;
+      text-transform: uppercase; font-weight: 400;
+      opacity: 0.55; padding: 0.4rem 1.2rem;
+      border-bottom: 2px solid transparent;
+      transition: opacity 0.2s, border-color 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; border-color: var(--orange); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh; background: var(--dark-green);
+      display: grid; grid-template-columns: 1.1fr 0.9fr;
+      position: relative; overflow: hidden;
+    }
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 10rem 5rem 6rem; position: relative; z-index: 1;
+    }
+    .hero-eyebrow {
+      font-size: 0.68rem; letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 2rem;
+      opacity: 0; animation: fadeUp 0.9s 0.2s forwards;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 5.5vw, 6rem);
+      font-weight: 300; line-height: 1.02; color: var(--cream);
+      margin-bottom: 2.5rem;
+      opacity: 0; animation: fadeUp 0.9s 0.4s forwards;
+    }
+    .hero-title em { font-style: italic; color: var(--orange-mid); }
+    .hero-subtitle {
+      font-size: 0.9rem; line-height: 1.85;
+      color: rgba(253,245,238,0.5); max-width: 400px; margin-bottom: 3.5rem;
+      opacity: 0; animation: fadeUp 0.9s 0.6s forwards;
+    }
+    .hero-tags {
+      display: flex; gap: 0.8rem; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+    }
+    .hero-tag {
+      font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gold); border: 1px solid rgba(153,121,71,0.35);
+      padding: 0.4rem 1rem;
+    }
+    .hero-right {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      padding: 6rem 4rem 6rem 2rem;
+    }
+    .hero-frames { position: relative; width: 100%; max-width: 340px; }
+    .hero-frame {
+      width: 100%; padding-bottom: 120%; position: relative;
+      border: 1px solid rgba(153,121,71,0.25);
+    }
+    .hero-frame-back {
+      position: absolute; width: 88%; padding-bottom: 105%;
+      top: -2rem; right: -2rem;
+      border: 1px solid rgba(250,120,70,0.12);
+      background: rgba(45,55,45,0.35);
+    }
+    .hero-frame-inner {
+      position: absolute; inset: 0; background: var(--mid-green);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: rgba(255,171,121,0.25); text-align: center; padding: 2rem;
+    }
+    .hero-frame-inner p {
+      font-size: 0.7rem; letter-spacing: 0.14em;
+      text-transform: uppercase; margin-top: 0.6rem;
+    }
+
+    /* ABOUT */
+    .about { background: var(--cream); display: grid; grid-template-columns: 1fr 1fr; }
+    .about-image-col {
+      background: var(--mid-green); min-height: 520px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,171,121,0.22); text-align: center; padding: 2rem;
+      font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+      position: relative; overflow: hidden;
+    }
+    .about-content {
+      padding: 6rem 5rem;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .section-label {
+      font-size: 0.68rem; letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 1.2rem; font-weight: 400;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3vw, 3rem); font-weight: 400;
+      line-height: 1.15; color: var(--dark-green); margin-bottom: 2rem;
+    }
+    .section-title em { font-style: italic; color: var(--orange); }
+    .body-text {
+      font-size: 0.92rem; line-height: 1.95;
+      color: var(--soft-green); margin-bottom: 1.4rem; max-width: 500px;
+    }
+    .about-mission {
+      margin-top: 2rem; padding: 1.6rem 2rem;
+      border-left: 2px solid var(--orange);
+      background: rgba(250,120,70,0.05);
+    }
+    .about-mission p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-style: italic;
+      line-height: 1.7; color: var(--olive);
+    }
+
+    /* DIVIDER */
+    .divider {
+      background: var(--dark-green); padding: 1rem 4rem;
+      display: flex; align-items: center; gap: 2rem;
+    }
+    .divider-line { flex: 1; height: 1px; background: rgba(153,121,71,0.2); }
+    .divider-text {
+      font-size: 0.65rem; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--gold); white-space: nowrap;
+    }
+
+    /* GALLERY SECTIONS */
+    .gallery-section { padding: 6rem 4rem; }
+    #paintings { background: var(--white); }
+    #polymer   { background: var(--cream); }
+    #ceramics  { background: var(--white); }
+
+    .gallery-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 3rem; padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(20,30,20,0.08);
+    }
+    .gallery-count {
+      font-size: 0.72rem; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--soft-green); opacity: 0.55;
+    }
+
+    /* PIECE GRID */
+    .piece-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
+
+    /* PIECE CARD */
+    .piece-card { display: flex; flex-direction: column; }
+    .piece-img {
+      width: 100%; padding-bottom: 100%;
+      position: relative; overflow: hidden; background: var(--mid-green);
+    }
+    .wide .piece-img { padding-bottom: 75%; }
+    .piece-img img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; transition: transform 0.5s ease;
+    }
+    .piece-card:hover .piece-img img { transform: scale(1.04); }
+    .piece-placeholder {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: rgba(255,171,121,0.22); font-size: 0.68rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      text-align: center; padding: 1rem;
+    }
+    .piece-info {
+      padding: 1.2rem 0 0;
+      border-top: 1px solid rgba(20,30,20,0.08);
+    }
+    .piece-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem; font-weight: 400;
+      color: var(--dark-green); margin-bottom: 0.3rem;
+    }
+    .piece-date {
+      font-size: 0.7rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--orange); margin-bottom: 0.6rem;
+    }
+    .piece-notes { font-size: 0.85rem; line-height: 1.7; color: var(--soft-green); }
+
+    /* EMPTY STATE */
+    .empty-state {
+      grid-column: 1 / -1; padding: 4rem 2rem; text-align: center;
+      border: 1px dashed rgba(20,30,20,0.12);
+    }
+    .empty-state p { font-size: 0.85rem; color: var(--soft-green); opacity: 0.55; margin-bottom: 0.5rem; }
+
+    /* FOOTER */
+    footer {
+      background: var(--dark-green); padding: 3rem 4rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .foot-logo {
+      font-family: 'Outfit', sans-serif; font-size: 1.3rem;
+      font-weight: 600; color: var(--gold); letter-spacing: -0.01em;
+    }
+    .foot-mission {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 0.95rem; color: rgba(253,245,238,0.38);
+      max-width: 300px; text-align: center; line-height: 1.6;
+    }
+    .foot-copy { font-size: 0.7rem; letter-spacing: 0.1em; color: rgba(253,245,238,0.22); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-left { padding: 8rem 2rem 3rem; }
+      .hero-right { display: none; }
+      .about { grid-template-columns: 1fr; }
+      .about-content { padding: 3rem 2rem; }
+      .piece-grid { grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+      .gallery-section { padding: 4rem 1.5rem; }
+      footer { flex-direction: column; gap: 1.5rem; text-align: center; padding: 2rem; }
+      .foot-mission { display: none; }
+    }
+    @media (max-width: 560px) {
+      .piece-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a class="nav-logo" href="#">Kanasu</a>
+    <ul class="nav-links">
+      <li><a href="#paintings">Paintings</a></li>
+      <li><a href="#polymer">Polymer Clay</a></li>
+      <li><a href="#ceramics">Ceramics</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">A living record of creative growth — Nashville, TN</p>
+      <h1 class="hero-title">
+        Art has<br>
+        <em>saved me</em><br>
+        more than once.
+      </h1>
+      <p class="hero-subtitle">
+        A record of creative growth across painting, polymer clay, and ceramics —
+        and a mission to make art accessible to those who need it most.
+      </p>
+      <div class="hero-tags">
+        <span class="hero-tag">Paintings</span>
+        <span class="hero-tag">Polymer Clay</span>
+        <span class="hero-tag">Ceramics</span>
+        <span class="hero-tag">Nashville</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-frames">
+        <div class="hero-frame-back"></div>
+        <div class="hero-frame">
+          <div class="hero-frame-inner">
+            <!--
+              TO ADD YOUR FAVOURITE PIECE HERE:
+              Replace this entire div.hero-frame-inner with:
+              <img src="your-image.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+            -->
+            <p>Add your favourite piece here</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-image-col">
+      <!--
+        TO ADD YOUR PHOTO:
+        Replace the text below with:
+        <img src="your-photo.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+      -->
+      Add your photo here
+    </div>
+    <div class="about-content reveal">
+      <p class="section-label">The story behind Kanasu</p>
+      <h2 class="section-title">Engineer.<br>Artist. <em>Healer.</em></h2>
+      <p class="body-text">
+        I was born in India and came to art in my early twenties — not as a career plan,
+        but as a way to process and accept what life had handed me. Art gave me a language
+        for what I couldn't otherwise express, and it changed everything.
+      </p>
+      <p class="body-text">
+        I began with acrylic painting and pouring, then fell into polymer clay jewelry.
+        I established Kanasu with a clear purpose: to create beautiful things and donate
+        proceeds to local women's shelters — because I believe deeply in the power of
+        support, and in reaching women who still need it. Kanasu was selected to showcase
+        at art fairs across San Diego before a growing family brought that chapter to a pause.
+      </p>
+      <p class="body-text">
+        Postpartum, ceramics found me. What began as a few hours of quiet studio time
+        became a lifeline back to myself. If I could draw one throughline through my life,
+        it would be art. It has met me at every difficult crossing and carried me forward.
+      </p>
+      <div class="about-mission">
+        <p>
+          "Art shouldn't have a high barrier to entry — it is too powerful, too therapeutic,
+          too human for that. My goal is to give back some of the peace I have found."
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIVIDER -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-text">Gallery</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       PAINTINGS
+       ══════════════════════════════════════════════ -->
+  <section class="gallery-section" id="paintings">
+    <div class="gallery-header reveal">
+      <div>
+        <p class="section-label">Medium — Acrylic</p>
+        <h2 class="section-title" style="margin-bottom:0;">Paintings</h2>
+      </div>
+      <span class="gallery-count">Where it all began</span>
+    </div>
+    <div class="piece-grid">
+
+      <!--
+      ═══════════════════════════════════════════
+      HOW TO ADD A PAINTING:
+      1. Upload your image file to GitHub (same folder as index.html)
+      2. Copy everything between the dashes below
+      3. Paste it just above the empty-state div
+      4. Replace the placeholder values with your details
+      ═══════════════════════════════════════════
+
+      <div class="piece-card wide reveal">
+        <div class="piece-img">
+          <img src="FILENAME.jpg" alt="Painting title">
+        </div>
+        <div class="piece-info">
+          <p class="piece-date">Month Year</p>
+          <h3 class="piece-title">Painting Title</h3>
+          <p class="piece-notes">What inspired this piece, what you learned, or how you feel about it.</p>
+        </div>
+      </div>
+      -->
+
+      <div class="empty-state">
+        <p>Your paintings will appear here.</p>
+        <p>See the HTML comment above for instructions on adding pieces.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       POLYMER CLAY JEWELRY
+       ══════════════════════════════════════════════ -->
+  <section class="gallery-section" id="polymer">
+    <div class="gallery-header reveal">
+      <div>
+        <p class="section-label">Medium — Polymer Clay</p>
+        <h2 class="section-title" style="margin-bottom:0;">Jewelry</h2>
+      </div>
+      <span class="gallery-count">The Kanasu collection</span>
+    </div>
+    <div class="piece-grid">
+
+      <!--
+      ═══════════════════════════════════════════
+      HOW TO ADD A JEWELRY PIECE:
+      1. Upload your image file to GitHub (same folder as index.html)
+      2. Copy everything between the dashes below
+      3. Paste it just above the empty-state div
+      4. Replace the placeholder values with your details
+      ═══════════════════════════════════════════
+
+      <div class="piece-card reveal">
+        <div class="piece-img">
+          <img src="FILENAME.jpg" alt="Piece title">
+        </div>
+        <div class="piece-info">
+          <p class="piece-date">Month Year</p>
+          <h3 class="piece-title">Piece Title</h3>
+          <p class="piece-notes">Technique used, what inspired it, or what you'd do differently next time.</p>
+        </div>
+      </div>
+      -->
+
+      <div class="empty-state">
+        <p>Your polymer clay pieces will appear here.</p>
+        <p>See the HTML comment above for instructions on adding pieces.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════
+       CERAMICS
+       ══════════════════════════════════════════════ -->
+  <section class="gallery-section" id="ceramics">
+    <div class="gallery-header reveal">
+      <div>
+        <p class="section-label">Medium — Stoneware & Earthenware</p>
+        <h2 class="section-title" style="margin-bottom:0;">Ceramics</h2>
+      </div>
+      <span class="gallery-count">Finding my way back</span>
+    </div>
+    <div class="piece-grid">
+
+      <!--
+      ═══════════════════════════════════════════
+      HOW TO ADD A CERAMIC PIECE:
+      1. Upload your image file to GitHub (same folder as index.html)
+      2. Copy everything between the dashes below
+      3. Paste it just above the empty-state div
+      4. Replace the placeholder values with your details
+      ═══════════════════════════════════════════
+
+      <div class="piece-card reveal">
+        <div class="piece-img">
+          <img src="FILENAME.jpg" alt="Piece title">
+        </div>
+        <div class="piece-info">
+          <p class="piece-date">Month Year</p>
+          <h3 class="piece-title">Piece Title</h3>
+          <p class="piece-notes">What you were working on, how it turned out, what it means to you.</p>
+        </div>
+      </div>
+      -->
+
+      <div class="empty-state">
+        <p>Your ceramic pieces will appear here.</p>
+        <p>See the HTML comment above for instructions on adding pieces.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="foot-logo">Kanasu</span>
+    <p class="foot-mission">
+      "Art has saved me at multiple points in my life.<br>
+      I want to pass that peace forward."
+    </p>
+    <span class="foot-copy">© 2026 Kanasu</span>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+        }
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

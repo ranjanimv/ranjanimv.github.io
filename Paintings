@@ -1,0 +1,10 @@
+ <div class="piece-card wide reveal">
+        <div class="piece-img">
+          <img src="FILENAME.jpg" alt="Painting title">
+        </div>
+        <div class="piece-info">
+          <p class="piece-date">Month Year</p>
+          <h3 class="piece-title">Painting Title</h3>
+          <p class="piece-notes">What inspired this piece, what you learned, or how you feel about it.</p>
+        </div>
+      </div>
